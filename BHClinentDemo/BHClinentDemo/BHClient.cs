@@ -11,26 +11,42 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
+/**
+ * 
+ * 代码段为内嵌壁虎车险机器人后台示例程序
+ * 
+ * TOPAGENTID 值为示例值
+ * 
+ * SECRETKEY 为示例值
+ * 
+ * 总体按照商家自己的情况而定
+ */
 namespace BHClinentDemo
 {
    public class BHClient
     {
-      // private readonly static Uri url = new Uri("http://lzl.91bihu.com/");
+ 
+       /// <summary>
+       /// 联合登录接口地址
+       /// </summary>
+       private const string UNITEURL = "http://bao.91bihu.com/Unite/Login";
+       private const int TOPAGENTID=123456;//顶级ID
+       private const string SECRETKEY="@#$%^&*I$%&";// 密钥商务合作后由壁虎提供
 
        public static void UnitLogin()
        {
            UniteLoginRequest request = new UniteLoginRequest() {
 
-               agentId = 73663,
-               userName="内测",
+               agentId = TOPAGENTID,
+               userName="测试",
                timestamp = DateTime.Now.ConvertToTimeStmap(),
                timeout=5000
            };
-           request.secCode = request.ToSecCode("60a78c69d89");
+           request.secCode = request.ToSecCode(SECRETKEY); 
 
            string body = JsonConvert.SerializeObject(request);
 
-           var response = PostResponse("http://bao.91bihu.com/Unite/Login", body);
+           var response = PostResponse(UNITEURL, body);
            if (response.Item1)
            {
                Console.WriteLine(response.Item2);
@@ -82,12 +98,31 @@ namespace BHClinentDemo
       
     }
 
+    /// <summary>
+    /// 联合登录请求对象
+    /// </summary>
+
    public class UniteLoginRequest
    {
+       /// <summary>
+       /// 顶级ID
+       /// </summary>
        public int agentId { get; set; }
+       /// <summary>
+       /// 合作方登录用户名
+       /// </summary>
        public string userName { get; set; }
+       /// <summary>
+       /// 时间戳
+       /// </summary>
        public long timestamp { get; set; }
+       /// <summary>
+       /// 加密串
+       /// </summary>
        public string secCode { get; set; }
+       /// <summary>
+       /// 登录过期时间
+       /// </summary>
        public int timeout { get; set; }
    }
 
@@ -120,8 +155,7 @@ namespace BHClinentDemo
            dic.Add("secretKey", secretKey);
            dic.Add("timestamp", request.timestamp.ToString());
            dic.Add("timeout", request.timeout.ToString());
-           string _str = string.Join("&", dic.Select(p => p.Key + '=' + p.Value).ToArray());
-           string testMd5 = "agentId=77765&userName=内测&secretKey=80c9e681654&timestamp=1492697401&timeout=5000".ToMD5();
+         
            return string.Join("&", dic.Select(p => p.Key + '=' + p.Value).ToArray()).ToMD5();
        }
 
