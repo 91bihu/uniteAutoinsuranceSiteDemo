@@ -12,7 +12,10 @@ namespace BHClinentDemo
         static void Main(string[] args)
         {
 
-            BHClient.UnitLogin();
+            //联合登录
+           // BHClient.UnitLogin();
+            //续保接口
+             BHClient.Renewal("467E1F4CBDE50D1885CDF9E2DB02EE45");
             Console.ReadKey();
         }
     }
